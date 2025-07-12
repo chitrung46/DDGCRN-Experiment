@@ -297,11 +297,11 @@ class Trainer(object):
         for t in range(y_true.shape[1]):
             mae, rmse, mape, _, pcc = All_Metrics(y_pred[:, t, ...], y_true[:, t, ...],
                                                 args.mae_thresh, args.mape_thresh)
-            logger.info("Horizon {:02d}, MAE: {:.4f}, RMSE: {:.4f}, MAPE: {:.4f}".format(
-                t + 1, mae, rmse, mape))
+            logger.info("Horizon {:02d}, MAE: {:.4f}, RMSE: {:.4f}, PCC: {:.4f}".format(
+                t + 1, mae, rmse, pcc))
         mae, rmse, mape, _, pcc = All_Metrics(y_pred, y_true, args.mae_thresh, args.mape_thresh)
-        logger.info("Average Horizon, MAE: {:.4f}, RMSE: {:.4f}, MAPE: {:.4f}".format(
-                    mae, rmse, mape))
+        logger.info("Average Horizon, MAE: {:.4f}, RMSE: {:.4f}, PCC: {:.4f}".format(
+                    mae, rmse, pcc))
 
     @staticmethod
     def _compute_sampling_threshold(global_step, k):
