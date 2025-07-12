@@ -125,6 +125,9 @@ class DDGCRN(nn.Module):
 
             source1 = self.end_conv2(output)
 
+            print(f"source shaped: {source.shape}")
+            print(f"source1 shaped: {source1.shape}")
+
             source2 = source -source1
 
             init_state2 = self.encoder2.init_hidden(source2.shape[0])   #[2,64,307,64] 前面是2是因为有两层GRU
