@@ -125,10 +125,16 @@ class DDGCRN(nn.Module):
 
             source1 = self.end_conv2(output)
 
-            print(f"source shaped: {source.shape}")
-            print(f"source1 shaped: {source1.shape}")
+            B, _, N, _ = source.shape
+            source1 = source1.squeeze(1) # B, T*C, N
+            source1 = source1.view(B, self.horizon, self.output_dim, N) # B, T, C, N
+            source1 = source1.permute(0, 1, 3, 2) # B, T, N, C
 
-            source2 = source -source1
+            output1 = output1.squeeze(1) # B, T*C, N
+            output1 = output1.view(B, self.horizon, self.output_dim, N) # B, T, C, N
+            output1 = output1.permute(0, 1, 3, 2) # B, T, N, C
+
+            source2 = source - source1
 
             init_state2 = self.encoder2.init_hidden(source2.shape[0])   #[2,64,307,64] 前面是2是因为有两层GRU
             output2, _ = self.encoder2(source2, init_state2, node_embeddings)      #B, T, N, hidden
@@ -138,6 +144,10 @@ class DDGCRN(nn.Module):
             # source2 = self.end_conv4(output2)
 
             output2 = self.end_conv3(output2)
+
+            output2 = output2.squeeze(1) # B, T*C, N
+            output2 = output2.view(B, self.horizon, self.output_dim, N) # B, T, C, N
+            output2 = output2.permute(0, 1, 3, 2) # B, T, N, C
 
             return output1 + output2
 
